@@ -8,13 +8,15 @@ namespace MegaGui.MegaEvent
 {
   class MegaLSEventArgs : System.EventArgs
   {
+    public MegaLSFileType Type;
+    public string Name;
+    public long Size;
+    public DateTime DateTime;
+
     public MegaLSEventArgs()
     {
-      OperationType = MegaOperation.LIST;
+      Size = 0;
     }
 
-    // Properties
-    public readonly MegaOperation OperationType;
-    public string Data;
   }
 }

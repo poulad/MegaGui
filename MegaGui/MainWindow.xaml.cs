@@ -30,17 +30,31 @@ namespace MegaGui
 
     private void button_Click(object sender, RoutedEventArgs e)
     {
-      mega.megalsOutputEvent += mega_OnEvent;
+      mega.OnFileInfoReady += mega_OnFileInfoReady;
+      mega.megalsErrorReceivedEvent += mega_megalsErrorReceivedEvent;
       mega.MegaLS();
     }
 
-    void mega_OnEvent(object sender, MegaLSEventArgs e)
+    void mega_megalsErrorReceivedEvent(object sender, System.Diagnostics.DataReceivedEventArgs e)
     {
       Dispatcher.BeginInvoke(new Action(delegate
       {
-        outputTextBox.Text += string.Format("\n{0}--{1}", e.Data, e.OperationType);
+        errorTextBox.Text += "\r\n" + e.Data;
       }), System.Windows.Threading.DispatcherPriority.ApplicationIdle, null);
     }
+
+    void mega_OnFileInfoReady(object sender, MegaLSEventArgs e)
+    {
+      Dispatcher.BeginInvoke(new Action(delegate
+      {
+        TreeViewItem child = new TreeViewItem();
+        child.Header = e.Name;
+        treeView.Items.Add(child);
+        outputTextBox.Text += string.Format("\r\n-->{0}--{1}<--",e.Name, e.DateTime.ToString());
+      }), System.Windows.Threading.DispatcherPriority.ApplicationIdle, null);
+    }
+
+     
 
   }
 
